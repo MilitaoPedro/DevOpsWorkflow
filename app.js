@@ -3,9 +3,8 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-// Mensagem retornada pelo endpoint. Alterada de "Hello World" para
-// "Hello World 2" na versao 2.0 da aplicacao.
-const MESSAGE = 'Hello World';
+// Mensagem retornada pelo endpoint. Era "Hello World" na versao 1.0.
+const MESSAGE = 'Hello World 2';
 
 app.get('/hello', (req, res) => {
   res.type('text/plain').send(MESSAGE);
