@@ -1,0 +1,14 @@
+{
+  "name": "devopsworkflow",
+  "version": "1.0.0",
+  "description": "Aplicacao de exemplo do exercicio pratico de Docker, GitHub Actions e Container Registry",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  },
+  "license": "MIT",
+  "private": true
+}
