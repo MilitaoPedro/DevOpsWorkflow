@@ -10,6 +10,13 @@ GitHub Actions disparada a cada push na branch `main`.
 - **Imagem publicada:** `ghcr.io/militaopedro/devopsworkflow`
 - **Tags disponíveis:** `1.0` (Hello World) e `2.0` (Hello World 2)
 
+### Execuções da pipeline
+
+| Versão | Commit | Pipeline | Resultado |
+| ------ | ------ | -------- | --------- |
+| 1.0 | `a975c3e` | [run #40615501744](https://github.com/MilitaoPedro/DevOpsWorkflow/actions/runs/40615501744) | ✅ success |
+| 2.0 | `93836cc` | [run #40616143584](https://github.com/MilitaoPedro/DevOpsWorkflow/actions/runs/40616143584) | ✅ success |
+
 ---
 
 ## Estrutura do projeto
@@ -129,10 +136,29 @@ curl http://localhost:8080/hello
 # Hello World
 ```
 
-Evidências em [`evidence/registry-1.0.md`](evidence/registry-1.0.md) e
-[`evidence/registry-2.0.md`](evidence/registry-2.0.md).
+Tags disponíveis no registry (verificado com `docker buildx imagetools inspect`):
 
-## 6. Fluxo completo
+| Tag | Digest |
+| --- | ------ |
+| `1.0` | `sha256:bc4a85cca3c7264a44f71da15cf3133371e426c50d23fb2b8cb10bdb5218e141` |
+| `2.0` | `sha256:bb854bfa81d3f1354df9ee7117c844020ad89f4086118d479bddfc8e120bcd11` |
+
+Evidências em [`evidence/registry-1.0.md`](evidence/registry-1.0.md),
+[`evidence/registry-2.0.md`](evidence/registry-2.0.md) e
+[`evidence/validacao-final.md`](evidence/validacao-final.md).
+
+## 6. Evidências
+
+| Entregável | Arquivo |
+| ---------- | ------- |
+| Build e execução local da versão 1.0 | [`evidence/local-1.0.md`](evidence/local-1.0.md) |
+| Build e execução local da versão 2.0 | [`evidence/local-2.0.md`](evidence/local-2.0.md) |
+| Imagem 1.0 publicada e executada do registry | [`evidence/registry-1.0.md`](evidence/registry-1.0.md) |
+| Imagem 2.0 publicada e executada do registry | [`evidence/registry-2.0.md`](evidence/registry-2.0.md) |
+| Execução final das duas tags do registry | [`evidence/validacao-final.md`](evidence/validacao-final.md) |
+| Execuções da pipeline | [run 1.0](https://github.com/MilitaoPedro/DevOpsWorkflow/actions/runs/40615501744) · [run 2.0](https://github.com/MilitaoPedro/DevOpsWorkflow/actions/runs/40616143584) |
+
+## 7. Fluxo completo
 
 ```
 Desenvolvedor → git push → Repositório GitHub
