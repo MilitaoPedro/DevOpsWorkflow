@@ -3,6 +3,24 @@
 Requisito 5: introduzir intencionalmente uma dependência com CVE conhecida e correção
 disponível, comprovar a falha da verificação e o bloqueio do merge.
 
+- **Pull Request:** [#1](https://github.com/MilitaoPedro/DevOpsWorkflow/pull/1) —
+  `demo/vulnerabilidade` → `main`
+- **Execução da pipeline:** [run #40624823499](https://github.com/MilitaoPedro/DevOpsWorkflow/actions/runs/40624823499)
+  — resultado: ❌ **failure**
+
+## Resultado dos checks no PR
+
+| Check | Resultado |
+| ----- | --------- |
+| `gitleaks` | ✅ success |
+| `sonarcloud` | ✅ success |
+| `trivy` | ❌ **failure** |
+| `sbom` | ✅ success |
+| `publish` | ⏭️ **skipped** (não executou) |
+
+O estado do PR é **`unstable`**, ou seja, com check obrigatório falhando — o merge fica
+bloqueado enquanto a proteção de branch estiver configurada.
+
 ## O que foi introduzido
 
 Branch de teste: `demo/vulnerabilidade` (commit `8dab84c`)
@@ -52,12 +70,29 @@ $ echo $?
 
 ## Consequências do bloqueio
 
-1. O job `trivy` falha.
-2. O job `publish` **não executa**, porque declara
+1. O job `trivy` falha — o passo bloqueante
+   *"Trivy - dependencias (bloqueia CRITICAL/HIGH com correcao)"* retorna código de saída
+   `1`.
+2. O job `publish` **não executa** (`skipped`), porque declara
    `needs: [gitleaks, sonarcloud, trivy]` — a imagem vulnerável **não é publicada** no
-   registry.
+   registry, atendendo ao requisito de não publicar a versão vulnerável em produção.
 3. Com a proteção de branch configurada (ver README), o merge do Pull Request fica
    bloqueado enquanto o check obrigatório estiver falhando.
+
+Detalhe dos jobs na execução do PR:
+
+```
+JOB trivy          -> failure
+    [ok  ] Checkout do codigo
+    [FAIL] Trivy - dependencias (bloqueia CRITICAL/HIGH com correcao)
+    [ok  ] Trivy - dependencias (relatorio LOW/MEDIUM, nao bloqueia)
+    [--  ] Build da imagem Docker para varredura
+    ...
+JOB gitleaks       -> success
+JOB sonarcloud     -> success
+JOB sbom           -> success
+JOB publish        -> skipped
+```
 
 ## Detalhamento das vulnerabilidades
 
