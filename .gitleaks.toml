@@ -1,0 +1,20 @@
+# Configuracao do Gitleaks.
+#
+# Estende as regras padrao do Gitleaks e adiciona apenas exclusoes para
+# arquivos que comprovadamente nao contem segredos reais:
+#  - o proprio arquivo de configuracao (que cita padroes como texto);
+#  - artefatos de evidencia (relatorios de scan, SBOMs);
+#  - o material didatico do trabalho (PDFs de enunciado).
+#
+# Nenhuma regra de deteccao e desativada aqui.
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Exclusoes que nao contem credenciais reais"
+paths = [
+  '''^\.gitleaks\.toml$''',
+  '''^evidence/''',
+  '''(?i)\.pdf$''',
+]
