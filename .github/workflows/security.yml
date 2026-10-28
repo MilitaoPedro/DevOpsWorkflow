@@ -104,6 +104,7 @@ jobs:
 
       # --- Imagem Docker ----------------------------------------------------
       - name: Build da imagem Docker para varredura
+        id: build-image
         run: docker build -t devopsworkflow:scan .
 
       - name: Trivy - imagem (bloqueia CRITICAL/HIGH com correcao)
@@ -118,8 +119,12 @@ jobs:
           format: table
           output: trivy-image-blocking.txt
 
+      # Roda apenas se a imagem chegou a ser construida. Sem esta condicao o
+      # passo falharia ao tentar varrer uma imagem inexistente quando o gate
+      # anterior bloqueia o pipeline - o que daria a impressao de que a
+      # verificacao "nao bloqueante" tambem esta quebrada.
       - name: Trivy - imagem (relatorio LOW/MEDIUM, nao bloqueia)
-        if: always()
+        if: always() && steps.build-image.outcome == 'success'
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           scan-type: image
